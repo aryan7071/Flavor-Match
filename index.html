@@ -1,0 +1,1910 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlavorMatch - Cyberpunk Edition</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --neon-cyan: #00ffff;
+            --neon-magenta: #ff00ff;
+            --neon-yellow: #ffff00;
+            --neon-green: #00ff41;
+            --dark-bg: #0a0a0f;
+            --card-bg: #1a1a2e;
+            --purple-glow: #9d00ff;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: var(--dark-bg);
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: white;
+            position: relative;
+        }
+
+        /* Cyberpunk Grid Background */
+        .cyber-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(90deg, rgba(0, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(0deg, rgba(0, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridScroll 20s linear infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes gridScroll {
+            0% { transform: perspective(500px) rotateX(60deg) translateY(0); }
+            100% { transform: perspective(500px) rotateX(60deg) translateY(50px); }
+        }
+
+        /* Glitch Effect Background */
+        .glitch-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, rgba(157, 0, 255, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 0.8; }
+        }
+
+        /* Floating Particles */
+        .particles {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: var(--neon-cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--neon-cyan);
+            animation: float-particle 10s linear infinite;
+        }
+
+        @keyframes float-particle {
+            0% {
+                transform: translateY(100vh) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) translateX(100px);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Screens */
+        .screen {
+            display: none;
+            width: 100%;
+            animation: screenFade 0.5s;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes screenFade {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Welcome Screen */
+        .welcome-card {
+            background: linear-gradient(135deg, var(--card-bg) 0%, rgba(157, 0, 255, 0.2) 100%);
+            border: 2px solid var(--neon-cyan);
+            border-radius: 20px;
+            padding: 60px 40px;
+            text-align: center;
+            box-shadow: 
+                0 0 30px rgba(0, 255, 255, 0.3),
+                inset 0 0 30px rgba(0, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .welcome-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(0, 255, 255, 0.1), transparent);
+            animation: scanline 3s linear infinite;
+        }
+
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 56px;
+            font-weight: 900;
+            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-magenta), var(--neon-cyan));
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            animation: neonFlow 3s linear infinite;
+            text-shadow: 
+                0 0 20px rgba(0, 255, 255, 0.5),
+                0 0 40px rgba(255, 0, 255, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes neonFlow {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
+
+        .glitch-text {
+            position: relative;
+            display: inline-block;
+        }
+
+        .glitch-text::before,
+        .glitch-text::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .glitch-text::before {
+            animation: glitch-1 2s infinite;
+            color: var(--neon-cyan);
+            z-index: -1;
+        }
+
+        .glitch-text::after {
+            animation: glitch-2 2s infinite;
+            color: var(--neon-magenta);
+            z-index: -2;
+        }
+
+        @keyframes glitch-1 {
+            0%, 100% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+        }
+
+        @keyframes glitch-2 {
+            0%, 100% { transform: translate(0); }
+            20% { transform: translate(2px, -2px); }
+            40% { transform: translate(2px, 2px); }
+            60% { transform: translate(-2px, -2px); }
+            80% { transform: translate(-2px, 2px); }
+        }
+
+        .tagline {
+            font-size: 18px;
+            color: var(--neon-cyan);
+            margin-bottom: 40px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .emoji-showcase {
+            font-size: 70px;
+            margin-bottom: 30px;
+            animation: hologram 3s infinite;
+            position: relative;
+            z-index: 1;
+            filter: drop-shadow(0 0 20px var(--neon-magenta));
+        }
+
+        @keyframes hologram {
+            0%, 100% { 
+                transform: translateY(0) scale(1);
+                filter: drop-shadow(0 0 20px var(--neon-magenta));
+            }
+            50% { 
+                transform: translateY(-15px) scale(1.1);
+                filter: drop-shadow(0 0 30px var(--neon-cyan));
+            }
+        }
+
+        .description {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.8;
+            margin-bottom: 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-magenta));
+            color: var(--dark-bg);
+            border: none;
+            padding: 18px 50px;
+            font-size: 20px;
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 
+                0 0 20px var(--neon-cyan),
+                0 0 40px var(--neon-magenta),
+                0 10px 30px rgba(0, 0, 0, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-family: 'Orbitron', sans-serif;
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 
+                0 0 30px var(--neon-cyan),
+                0 0 60px var(--neon-magenta),
+                0 15px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .btn-primary:active {
+            transform: translateY(-1px) scale(1.02);
+        }
+
+        /* Preference Screen */
+        .preference-card {
+            background: linear-gradient(135deg, var(--card-bg) 0%, rgba(157, 0, 255, 0.2) 100%);
+            border: 2px solid var(--neon-cyan);
+            border-radius: 20px;
+            padding: 50px 40px;
+            box-shadow: 
+                0 0 30px rgba(0, 255, 255, 0.3),
+                inset 0 0 30px rgba(0, 255, 255, 0.05);
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .step-dot {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid var(--neon-cyan);
+            transition: all 0.3s;
+        }
+
+        .step-dot.active {
+            background: var(--neon-cyan);
+            width: 50px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px var(--neon-cyan);
+        }
+
+        .preference-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 36px;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 15px;
+            color: var(--neon-cyan);
+            text-transform: uppercase;
+            text-shadow: 0 0 20px var(--neon-cyan);
+        }
+
+        .preference-subtitle {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 16px;
+            margin-bottom: 40px;
+        }
+
+        .option-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .option-card {
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.8) 0%, rgba(157, 0, 255, 0.1) 100%);
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            border-radius: 15px;
+            padding: 25px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option-card::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--neon-cyan) 0%, transparent 70%);
+            transform: translate(-50%, -50%);
+            transition: all 0.5s;
+            opacity: 0;
+        }
+
+        .option-card:hover::before {
+            width: 200%;
+            height: 200%;
+            opacity: 0.2;
+        }
+
+        .option-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 20px var(--neon-cyan);
+        }
+
+        .option-card.selected {
+            border-color: var(--neon-magenta);
+            background: linear-gradient(135deg, rgba(157, 0, 255, 0.3) 0%, rgba(255, 0, 255, 0.2) 100%);
+            box-shadow: 
+                0 0 30px var(--neon-magenta),
+                inset 0 0 20px rgba(255, 0, 255, 0.2);
+        }
+
+        .option-card.selected::after {
+            content: '✓';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--neon-magenta);
+            color: var(--dark-bg);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: bold;
+            box-shadow: 0 0 15px var(--neon-magenta);
+        }
+
+        .option-emoji {
+            font-size: 48px;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 0 10px var(--neon-cyan));
+        }
+
+        .option-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .option-desc {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .tag-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .tag-chip {
+            background: rgba(26, 26, 46, 0.8);
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            border-radius: 25px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.8);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .tag-chip:hover {
+            border-color: var(--neon-cyan);
+            transform: scale(1.05);
+            box-shadow: 0 0 15px var(--neon-cyan);
+        }
+
+        .tag-chip.selected {
+            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-magenta));
+            border-color: var(--neon-magenta);
+            color: var(--dark-bg);
+            box-shadow: 0 0 20px var(--neon-magenta);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 40px;
+        }
+
+        .btn-back {
+            flex: 1;
+            background: transparent;
+            color: var(--neon-cyan);
+            border: 2px solid var(--neon-cyan);
+            padding: 16px 40px;
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .btn-back:hover {
+            background: var(--neon-cyan);
+            color: var(--dark-bg);
+            box-shadow: 0 0 20px var(--neon-cyan);
+        }
+
+        .btn-next {
+            flex: 2;
+            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-magenta));
+            color: var(--dark-bg);
+            border: none;
+            padding: 16px 40px;
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 0 20px var(--neon-cyan);
+            text-transform: uppercase;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .btn-next:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 0 30px var(--neon-cyan), 0 0 50px var(--neon-magenta);
+        }
+
+        .btn-next:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        /* Game Screen */
+        .game-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .game-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 48px;
+            font-weight: 900;
+            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-magenta));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px var(--neon-cyan);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .game-subtitle {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .remaining-cards {
+            text-align: center;
+            color: var(--neon-yellow);
+            font-size: 16px;
+            margin-top: 10px;
+            font-weight: 700;
+            text-shadow: 0 0 10px var(--neon-yellow);
+        }
+
+        .stats-container {
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.8) 0%, rgba(157, 0, 255, 0.2) 100%);
+            border: 2px solid var(--neon-cyan);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-around;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 32px;
+            font-weight: 900;
+            color: var(--neon-cyan);
+            text-shadow: 0 0 20px var(--neon-cyan);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 5px;
+        }
+
+        /* Card Stack */
+        .card-area {
+            position: relative;
+            height: 500px;
+            margin-bottom: 30px;
+            perspective: 1000px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-area:empty::before {
+            content: 'LOADING MATCHES...';
+            font-family: 'Orbitron', sans-serif;
+            font-size: 24px;
+            color: var(--neon-cyan);
+            text-shadow: 0 0 20px var(--neon-cyan);
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        .food-card {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--card-bg) 0%, rgba(157, 0, 255, 0.3) 100%);
+            border: 3px solid var(--neon-cyan);
+            border-radius: 30px;
+            box-shadow: 
+                0 0 40px var(--neon-cyan),
+                inset 0 0 40px rgba(0, 255, 255, 0.1),
+                0 20px 60px rgba(0, 0, 0, 0.5);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s, opacity 0.3s;
+            cursor: grab;
+            overflow: hidden;
+        }
+
+        .food-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(0, 255, 255, 0.05), transparent);
+            animation: cardScan 3s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes cardScan {
+            0% { transform: translateY(-100%) rotate(0deg); }
+            100% { transform: translateY(100%) rotate(360deg); }
+        }
+
+        .food-card:active {
+            cursor: grabbing;
+        }
+
+        .food-card.swiping-left {
+            border-color: #ff0055;
+            box-shadow: 0 0 50px #ff0055;
+        }
+
+        .food-card.swiping-right {
+            border-color: var(--neon-green);
+            box-shadow: 0 0 50px var(--neon-green);
+        }
+
+        .swipe-indicator {
+            position: absolute;
+            top: 50px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 90px;
+            font-weight: 900;
+            opacity: 0;
+            transition: opacity 0.2s;
+            pointer-events: none;
+            text-shadow: 0 0 30px currentColor;
+        }
+
+        .swipe-indicator.nope {
+            left: 50px;
+            color: #ff0055;
+            transform: rotate(-30deg);
+        }
+
+        .swipe-indicator.like {
+            right: 50px;
+            color: var(--neon-green);
+            transform: rotate(30deg);
+        }
+
+        .food-card.swiping-left .swipe-indicator.nope,
+        .food-card.swiping-right .swipe-indicator.like {
+            opacity: 0.9;
+        }
+
+        .card-emoji {
+            font-size: 120px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 30px var(--neon-magenta));
+            animation: cardEmojiFloat 3s ease-in-out infinite;
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes cardEmojiFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+        }
+
+        .card-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 32px;
+            font-weight: 900;
+            color: var(--neon-cyan);
+            margin-bottom: 10px;
+            text-align: center;
+            text-transform: uppercase;
+            text-shadow: 0 0 20px var(--neon-cyan);
+            position: relative;
+            z-index: 1;
+        }
+
+        .card-description {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.8);
+            text-align: center;
+            margin-bottom: 20px;
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+
+        .card-price {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 28px;
+            font-weight: 900;
+            color: var(--neon-magenta);
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px var(--neon-magenta);
+            position: relative;
+            z-index: 1;
+        }
+
+        .card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .card-tag {
+            background: rgba(0, 255, 255, 0.2);
+            border: 1px solid var(--neon-cyan);
+            color: var(--neon-cyan);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        .action-btn {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid;
+            font-size: 36px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            font-weight: 900;
+        }
+
+        .action-btn::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 3px solid;
+            border-color: inherit;
+            animation: sonar 2s ease-out infinite;
+            opacity: 0;
+        }
+
+        @keyframes sonar {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        .action-btn:hover {
+            transform: scale(1.15);
+        }
+
+        .action-btn:active {
+            transform: scale(0.95);
+        }
+
+        .btn-nope {
+            background: linear-gradient(135deg, #ff0055 0%, #cc0044 100%);
+            border-color: #ff0055;
+            color: white;
+            box-shadow: 0 0 30px #ff0055;
+        }
+
+        .btn-like {
+            background: linear-gradient(135deg, var(--neon-green) 0%, #00cc33 100%);
+            border-color: var(--neon-green);
+            color: var(--dark-bg);
+            box-shadow: 0 0 30px var(--neon-green);
+        }
+
+        .btn-super {
+            background: linear-gradient(135deg, var(--neon-yellow) 0%, #ffcc00 100%);
+            border-color: var(--neon-yellow);
+            width: 100px;
+            height: 100px;
+            font-size: 48px;
+            color: var(--dark-bg);
+            box-shadow: 0 0 40px var(--neon-yellow);
+        }
+
+        /* Match Overlay */
+        .match-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s;
+        }
+
+        .match-overlay.show {
+            display: flex;
+        }
+
+        .match-content {
+            text-align: center;
+            animation: matchPop 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        @keyframes matchPop {
+            0% {
+                transform: scale(0) rotate(-180deg);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        .match-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 90px;
+            font-weight: 900;
+            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-magenta), var(--neon-yellow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            text-shadow: 0 0 50px var(--neon-cyan);
+            animation: matchGlow 1s ease-in-out infinite;
+        }
+
+        @keyframes matchGlow {
+            0%, 100% {
+                filter: drop-shadow(0 0 30px var(--neon-cyan));
+            }
+            50% {
+                filter: drop-shadow(0 0 60px var(--neon-magenta));
+            }
+        }
+
+        .match-emoji {
+            font-size: 150px;
+            margin-bottom: 20px;
+            animation: matchRotate 1s ease-in-out;
+            filter: drop-shadow(0 0 40px var(--neon-yellow));
+        }
+
+        @keyframes matchRotate {
+            0% { transform: rotate(0deg) scale(0.5); }
+            50% { transform: rotate(180deg) scale(1.2); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+
+        .match-info {
+            font-family: 'Orbitron', sans-serif;
+            color: white;
+            font-size: 28px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        /* Results Screen */
+        .results-card {
+            background: linear-gradient(135deg, var(--card-bg) 0%, rgba(157, 0, 255, 0.3) 100%);
+            border: 2px solid var(--neon-cyan);
+            border-radius: 30px;
+            padding: 50px 40px;
+            box-shadow: 
+                0 0 40px var(--neon-cyan),
+                inset 0 0 40px rgba(0, 255, 255, 0.1);
+            text-align: center;
+        }
+
+        .results-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 42px;
+            font-weight: 900;
+            color: var(--neon-cyan);
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            text-shadow: 0 0 30px var(--neon-cyan);
+        }
+
+        .results-summary {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .summary-item {
+            background: rgba(26, 26, 46, 0.6);
+            border: 2px solid var(--neon-magenta);
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.3);
+        }
+
+        .summary-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 42px;
+            font-weight: 900;
+            color: var(--neon-magenta);
+            text-shadow: 0 0 20px var(--neon-magenta);
+        }
+
+        .summary-label {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .matches-list {
+            max-height: 350px;
+            overflow-y: auto;
+            margin-bottom: 30px;
+        }
+
+        .matches-list::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .matches-list::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .matches-list::-webkit-scrollbar-thumb {
+            background: var(--neon-cyan);
+            border-radius: 10px;
+            box-shadow: 0 0 10px var(--neon-cyan);
+        }
+
+        .match-item {
+            background: rgba(26, 26, 46, 0.6);
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: all 0.3s;
+        }
+
+        .match-item:hover {
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 20px var(--neon-cyan);
+            transform: translateX(5px);
+        }
+
+        .match-item-emoji {
+            font-size: 50px;
+            filter: drop-shadow(0 0 10px var(--neon-magenta));
+        }
+
+        .match-item-info {
+            flex: 1;
+            text-align: left;
+        }
+
+        .match-item-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .match-item-price {
+            font-size: 16px;
+            color: var(--neon-magenta);
+            font-weight: 700;
+        }
+
+        /* Responsive */
+        @media (min-width: 8px) {
+            .logo {
+                font-size: 42px;
+            }
+
+            .option-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .card-area {
+                height: 450px;
+            }
+
+            .food-card {
+                padding: 30px 20px;
+            }
+
+            .card-emoji {
+                font-size: 90px;
+            }
+
+            .card-name {
+                font-size: 24px;
+            }
+
+            .action-buttons {
+                gap: 20px;
+            }
+
+            .action-btn {
+                width: 65px;
+                height: 65px;
+                font-size: 30px;
+            }
+
+            .btn-super {
+                width: 80px;
+                height: 80px;
+                font-size: 40px;
+            }
+
+            .match-title {
+                font-size: 60px;
+            }
+
+            .match-emoji {
+                font-size: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Cyberpunk Background -->
+    <div class="cyber-grid"></div>
+    <div class="glitch-bg"></div>
+    <div class="particles" id="particles"></div>
+
+    <div class="container">
+        <!-- Welcome Screen -->
+        <div class="screen active" id="welcomeScreen">
+            <div class="welcome-card">
+                <div class="logo glitch-text" data-text="FLAVOR_MATCH">FLAVOR_MATCH</div>
+                <div class="tagline">Cyberpunk Food Decision Engine</div>
+                <div class="emoji-showcase">🍜🍣🍔🌮🍕</div>
+                <div class="description">
+                    Jack into the matrix of flavor. Upload your preferences, 
+                    swipe through digital food streams, and let our AI-powered 
+                    neural network solve your dining dilemmas. The future of 
+                    food decisions is now.
+                </div>
+                <button class="btn-primary" onclick="goToPreferences()">
+                    INITIALIZE →
+                </button>
+            </div>
+        </div>
+
+        <!-- Preference Screen -->
+        <div class="screen" id="preferenceScreen">
+            <div class="preference-card">
+                <div class="step-indicator">
+                    <div class="step-dot active"></div>
+                    <div class="step-dot"></div>
+                    <div class="step-dot"></div>
+                </div>
+
+                <!-- Step 1: Vibe -->
+                <div class="preference-step active" id="step1">
+                    <div class="preference-title">SELECT VIBE</div>
+                    <div class="preference-subtitle">Choose your current state</div>
+                    
+                    <div class="option-grid">
+                        <div class="option-card" data-type="vibe" data-value="hangry">
+                            <div class="option-emoji">😤</div>
+                            <div class="option-name">Hangry</div>
+                            <div class="option-desc">Emergency fuel required</div>
+                        </div>
+                        <div class="option-card" data-type="vibe" data-value="fancy">
+                            <div class="option-emoji">✨</div>
+                            <div class="option-name">Fancy</div>
+                            <div class="option-desc">Premium experience</div>
+                        </div>
+                        <div class="option-card" data-type="vibe" data-value="comfort">
+                            <div class="option-emoji">🛋️</div>
+                            <div class="option-name">Comfort</div>
+                            <div class="option-desc">Nostalgic vibes</div>
+                        </div>
+                        <div class="option-card" data-type="vibe" data-value="adventure">
+                            <div class="option-emoji">🚀</div>
+                            <div class="option-name">Adventure</div>
+                            <div class="option-desc">Explore new realms</div>
+                        </div>
+                    </div>
+
+                    <div class="button-group">
+                        <button class="btn-back" onclick="goToWelcome()">← ABORT</button>
+                        <button class="btn-next" id="nextStep1" disabled onclick="goToStep(2)">NEXT →</button>
+                    </div>
+                </div>
+
+                <!-- Step 2: Budget -->
+                <div class="preference-step" id="step2">
+                    <div class="preference-title">CREDIT LIMIT</div>
+                    <div class="preference-subtitle">Set your spending parameters</div>
+                    
+                    <div class="option-grid">
+                        <div class="option-card" data-type="budget" data-value="cheap">
+                            <div class="option-emoji">💵</div>
+                            <div class="option-name">Budget</div>
+                            <div class="option-desc">$5 - $15</div>
+                        </div>
+                        <div class="option-card" data-type="budget" data-value="moderate">
+                            <div class="option-emoji">💳</div>
+                            <div class="option-name">Moderate</div>
+                            <div class="option-desc">$15 - $30</div>
+                        </div>
+                        <div class="option-card" data-type="budget" data-value="expensive">
+                            <div class="option-emoji">💎</div>
+                            <div class="option-name">Premium</div>
+                            <div class="option-desc">$30+</div>
+                        </div>
+                        <div class="option-card" data-type="budget" data-value="any">
+                            <div class="option-emoji">🌟</div>
+                            <div class="option-name">Unlimited</div>
+                            <div class="option-desc">No restrictions</div>
+                        </div>
+                    </div>
+
+                    <div class="button-group">
+                        <button class="btn-back" onclick="goToStep(1)">← BACK</button>
+                        <button class="btn-next" id="nextStep2" disabled onclick="goToStep(3)">NEXT →</button>
+                    </div>
+                </div>
+
+                <!-- Step 3: Tags -->
+                <div class="preference-step" id="step3">
+                    <div class="preference-title">TAG FILTERS</div>
+                    <div class="preference-subtitle">Select attributes (optional)</div>
+                    
+                    <div class="tag-grid">
+                        <div class="tag-chip" data-type="tag" data-value="spicy">🌶️ Spicy</div>
+                        <div class="tag-chip" data-type="tag" data-value="fast">⚡ Fast</div>
+                        <div class="tag-chip" data-type="tag" data-value="healthy">🥗 Healthy</div>
+                        <div class="tag-chip" data-type="tag" data-value="comfort">🍲 Comfort</div>
+                        <div class="tag-chip" data-type="tag" data-value="filling">🍽️ Filling</div>
+                        <div class="tag-chip" data-type="tag" data-value="fresh">🌿 Fresh</div>
+                        <div class="tag-chip" data-type="tag" data-value="shareable">👥 Shareable</div>
+                        <div class="tag-chip" data-type="tag" data-value="adventure">🗺️ Exotic</div>
+                    </div>
+
+                    <div class="button-group">
+                        <button class="btn-back" onclick="goToStep(2)">← BACK</button>
+                        <button class="btn-next" onclick="startMatching()">ENGAGE 🚀</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Screen -->
+        <div class="screen" id="gameScreen">
+            <div class="game-header">
+                <div class="game-title">FLAVOR_MATCH</div>
+                <div class="game-subtitle">Swipe right ♥ or left ✗</div>
+                <div class="remaining-cards" id="remainingCards">0 cards remaining</div>
+            </div>
+
+            <div class="stats-container">
+                <div class="stat-item">
+                    <div class="stat-value" id="swipeCount">0</div>
+                    <div class="stat-label">Swipes</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="matchCount">0</div>
+                    <div class="stat-label">Matches</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="comboCount">0</div>
+                    <div class="stat-label">Combo</div>
+                </div>
+            </div>
+
+            <div class="card-area" id="cardArea">
+                <!-- Cards will be inserted here -->
+            </div>
+
+            <div class="action-buttons">
+                <button class="action-btn btn-nope" id="nopeBtn">✗</button>
+                <button class="action-btn btn-super" id="superBtn">⭐</button>
+                <button class="action-btn btn-like" id="likeBtn">♥</button>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div class="screen" id="resultsScreen">
+            <div class="results-card">
+                <div class="results-title">🎯 MATCH RESULTS</div>
+                
+                <div class="results-summary">
+                    <div class="summary-item">
+                        <div class="summary-value" id="totalSwipes">0</div>
+                        <div class="summary-label">Total Swipes</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-value" id="totalMatches">0</div>
+                        <div class="summary-label">Total Matches</div>
+                    </div>
+                </div>
+
+                <div class="matches-list" id="matchesList">
+                    <!-- Matches will be inserted here -->
+                </div>
+
+                <button class="btn-primary" onclick="restartApp()">REBOOT SYSTEM</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Match Overlay -->
+    <div class="match-overlay" id="matchOverlay">
+        <div class="match-content">
+            <div class="match-title">MATCH!</div>
+            <div class="match-emoji" id="matchEmoji">🎉</div>
+            <div class="match-info" id="matchInfo"></div>
+        </div>
+    </div>
+
+    <script>
+        // Create floating particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 10 + 's';
+                particle.style.animationDuration = (5 + Math.random() * 10) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+        createParticles();
+
+        // Food Database from JSON
+        const foodDatabase = [
+            {
+                id: 1,
+                name: "RAMEN NEXUS",
+                emoji: "🍜",
+                description: "Digital noodles in quantum broth",
+                tags: ["spicy", "fast", "comfort", "cheap"],
+                vibes: ["hangry", "comfort", "adventure"],
+                price: 12,
+                category: "asian"
+            },
+            {
+                id: 2,
+                name: "CYBER SUSHI",
+                emoji: "🍣",
+                description: "Molecular gastronomy meets tradition",
+                tags: ["fresh", "fancy", "healthy"],
+                vibes: ["fancy", "adventure"],
+                price: 45,
+                category: "asian"
+            },
+            {
+                id: 3,
+                name: "HOLOGRAM BURGER",
+                emoji: "🍔",
+                description: "Augmented reality beef experience",
+                tags: ["fast", "comfort", "cheap", "filling"],
+                vibes: ["hangry", "comfort"],
+                price: 15,
+                category: "american"
+            },
+            {
+                id: 4,
+                name: "NEON PIZZA",
+                emoji: "🍕",
+                description: "Glowing cheese from the matrix",
+                tags: ["fast", "cheap", "comfort", "shareable"],
+                vibes: ["hangry", "comfort"],
+                price: 18,
+                category: "italian"
+            },
+            {
+                id: 5,
+                name: "QUANTUM TACOS",
+                emoji: "🌮",
+                description: "Superposition of flavors",
+                tags: ["spicy", "fast", "cheap", "adventure"],
+                vibes: ["hangry", "adventure"],
+                price: 10,
+                category: "mexican"
+            },
+            {
+                id: 6,
+                name: "SYNTHETIC STEAK",
+                emoji: "🥩",
+                description: "Lab-grown luxury protein",
+                tags: ["fancy", "filling", "premium"],
+                vibes: ["fancy"],
+                price: 65,
+                category: "steakhouse"
+            },
+            {
+                id: 7,
+                name: "DIGITAL DIM SUM",
+                emoji: "🥟",
+                description: "Bite-sized data packets",
+                tags: ["fancy", "shareable", "adventure"],
+                vibes: ["fancy", "adventure"],
+                price: 35,
+                category: "asian"
+            },
+            {
+                id: 8,
+                name: "RETRO MAC & CHEESE",
+                emoji: "🧀",
+                description: "Comfort food from the 80s",
+                tags: ["comfort", "cheap", "filling"],
+                vibes: ["comfort"],
+                price: 14,
+                category: "american"
+            },
+            {
+                id: 9,
+                name: "PLASMA CURRY",
+                emoji: "🍛",
+                description: "Nuclear-powered spice experience",
+                tags: ["spicy", "comfort", "filling", "adventure"],
+                vibes: ["adventure", "comfort"],
+                price: 20,
+                category: "indian"
+            },
+            {
+                id: 10,
+                name: "VOID SALAD",
+                emoji: "🥗",
+                description: "Greens from the dark dimension",
+                tags: ["healthy", "fresh", "fancy"],
+                vibes: ["fancy"],
+                price: 22,
+                category: "healthy"
+            },
+            {
+                id: 11,
+                name: "PIXEL PARFAIT",
+                emoji: "🍨",
+                description: "8-bit ice cream simulation",
+                tags: ["sweet", "cheap", "fast"],
+                vibes: ["comfort"],
+                price: 8,
+                category: "dessert"
+            },
+            {
+                id: 12,
+                name: "MATRIX MEATBALLS",
+                emoji: "🍝",
+                description: "Italian code in red sauce",
+                tags: ["comfort", "filling", "cheap"],
+                vibes: ["comfort", "hangry"],
+                price: 16,
+                category: "italian"
+            },
+            {
+                id: 13,
+                name: "CYBERPUNK PHO",
+                emoji: "🍲",
+                description: "Vietnamese soup with neon garnish",
+                tags: ["healthy", "comfort", "adventure"],
+                vibes: ["adventure", "comfort"],
+                price: 18,
+                category: "asian"
+            },
+            {
+                id: 14,
+                name: "LASER LOBSTER",
+                emoji: "🦞",
+                description: "Crustacean from the future",
+                tags: ["fancy", "premium", "fresh"],
+                vibes: ["fancy"],
+                price: 85,
+                category: "seafood"
+            },
+            {
+                id: 15,
+                name: "BYTE-SIZED BURRITOS",
+                emoji: "🌯",
+                description: "Compressed data wrapped tight",
+                tags: ["fast", "filling", "cheap", "spicy"],
+                vibes: ["hangry", "comfort"],
+                price: 13,
+                category: "mexican"
+            }
+        ];
+
+        // Game State
+        let userPreferences = {
+            vibe: null,
+            budget: null,
+            tags: []
+        };
+
+        let currentDeck = [];
+        let currentIndex = 0;
+        let matches = [];
+        let swipeCount = 0;
+        let matchCount = 0;
+        let comboCount = 0;
+        let superLikes = [];
+
+        // Enhanced Sound Effects
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        const audioCtx = new AudioContext();
+
+        function playSound(type) {
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            
+            switch(type) {
+                case 'click':
+                    oscillator.type = 'square';
+                    oscillator.frequency.value = 1200;
+                    gainNode.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+                    oscillator.start(audioCtx.currentTime);
+                    oscillator.stop(audioCtx.currentTime + 0.1);
+                    break;
+                case 'match':
+                    oscillator.type = 'sine';
+                    oscillator.frequency.value = 800;
+                    gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                    oscillator.frequency.exponentialRampToValueAtTime(1600, audioCtx.currentTime + 0.2);
+                    oscillator.frequency.exponentialRampToValueAtTime(2000, audioCtx.currentTime + 0.4);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+                    oscillator.start(audioCtx.currentTime);
+                    oscillator.stop(audioCtx.currentTime + 0.4);
+                    break;
+                case 'swipe':
+                    oscillator.type = 'sawtooth';
+                    oscillator.frequency.value = 200;
+                    gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                    oscillator.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.15);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+                    oscillator.start(audioCtx.currentTime);
+                    oscillator.stop(audioCtx.currentTime + 0.15);
+                    break;
+            }
+        }
+
+        // Navigation Functions
+        function goToPreferences() {
+            showScreen('preferenceScreen');
+            playSound('click');
+        }
+
+        function goToWelcome() {
+            showScreen('welcomeScreen');
+            playSound('click');
+        }
+
+        function goToStep(stepNum) {
+            document.querySelectorAll('.preference-step').forEach(step => {
+                step.classList.remove('active');
+                step.style.display = 'none';
+            });
+            
+            document.getElementById(`step${stepNum}`).classList.add('active');
+            document.getElementById(`step${stepNum}`).style.display = 'block';
+            
+            document.querySelectorAll('.step-dot').forEach((dot, index) => {
+                dot.classList.toggle('active', index < stepNum);
+            });
+            
+            playSound('click');
+        }
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        // Preference Selection
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('option-card') || e.target.closest('.option-card')) {
+                const card = e.target.classList.contains('option-card') ? e.target : e.target.closest('.option-card');
+                const type = card.dataset.type;
+                const value = card.dataset.value;
+                
+                if (type === 'vibe') {
+                    document.querySelectorAll('[data-type="vibe"]').forEach(c => c.classList.remove('selected'));
+                    card.classList.add('selected');
+                    userPreferences.vibe = value;
+                    document.getElementById('nextStep1').disabled = false;
+                    playSound('click');
+                } else if (type === 'budget') {
+                    document.querySelectorAll('[data-type="budget"]').forEach(c => c.classList.remove('selected'));
+                    card.classList.add('selected');
+                    userPreferences.budget = value;
+                    document.getElementById('nextStep2').disabled = false;
+                    playSound('click');
+                }
+            }
+            
+            if (e.target.classList.contains('tag-chip')) {
+                e.target.classList.toggle('selected');
+                const value = e.target.dataset.value;
+                
+                if (e.target.classList.contains('selected')) {
+                    userPreferences.tags.push(value);
+                } else {
+                    userPreferences.tags = userPreferences.tags.filter(t => t !== value);
+                }
+                playSound('click');
+            }
+        });
+
+        // Start Matching
+        function startMatching() {
+            console.log('Starting matching with preferences:', userPreferences);
+            filterDeck();
+            console.log('Deck filtered, showing game screen');
+            showScreen('gameScreen');
+            
+            // Initialize remaining cards counter
+            const remaining = currentDeck.length;
+            document.getElementById('remainingCards').textContent = `${remaining} card${remaining !== 1 ? 's' : ''} remaining`;
+            
+            // Small delay to ensure screen transition completes
+            setTimeout(() => {
+                console.log('Showing first card');
+                showCard();
+            }, 100);
+            
+            playSound('match');
+        }
+
+        // Filter Deck
+        function filterDeck() {
+            currentDeck = foodDatabase.filter(food => {
+                // Check if vibe matches
+                if (!food.vibes.includes(userPreferences.vibe)) return false;
+                
+                // Check budget
+                if (userPreferences.budget !== 'any') {
+                    if (userPreferences.budget === 'cheap' && food.price > 15) return false;
+                    if (userPreferences.budget === 'moderate' && (food.price < 15 || food.price > 30)) return false;
+                    if (userPreferences.budget === 'expensive' && food.price < 30) return false;
+                }
+                
+                return true;
+            });
+
+            // If no matches found with strict filtering, show all items that match vibe
+            if (currentDeck.length === 0) {
+                currentDeck = foodDatabase.filter(food => food.vibes.includes(userPreferences.vibe));
+            }
+
+            // If still no matches, show everything
+            if (currentDeck.length === 0) {
+                currentDeck = [...foodDatabase];
+            }
+
+            // Sort by tag matches if tags were selected
+            if (userPreferences.tags.length > 0) {
+                currentDeck.sort((a, b) => {
+                    const aMatches = a.tags.filter(tag => userPreferences.tags.includes(tag)).length;
+                    const bMatches = b.tags.filter(tag => userPreferences.tags.includes(tag)).length;
+                    return bMatches - aMatches;
+                });
+            } else {
+                // Randomize if no tags selected
+                currentDeck.sort(() => Math.random() - 0.5);
+            }
+
+            console.log(`Filtered deck: ${currentDeck.length} items`);
+        }
+
+        // Show Card
+        function showCard() {
+            const cardArea = document.getElementById('cardArea');
+            cardArea.innerHTML = '';
+            
+            if (currentIndex >= currentDeck.length) {
+                showResults();
+                return;
+            }
+            
+            const food = currentDeck[currentIndex];
+            const card = document.createElement('div');
+            card.className = 'food-card';
+            card.innerHTML = `
+                <div class="swipe-indicator nope">NOPE</div>
+                <div class="swipe-indicator like">LIKE</div>
+                <div class="card-emoji">${food.emoji}</div>
+                <div class="card-name">${food.name}</div>
+                <div class="card-description">${food.description}</div>
+                <div class="card-price">$${food.price}</div>
+                <div class="card-tags">
+                    ${food.tags.map(tag => `<span class="card-tag">${tag}</span>`).join('')}
+                </div>
+            `;
+            
+            let startX = 0;
+            let currentX = 0;
+            let isDragging = false;
+            
+            function startDrag(e) {
+                e.preventDefault();
+                isDragging = true;
+                startX = e.type === 'mousedown' ? e.clientX : e.touches[0].clientX;
+            }
+            
+            function drag(e) {
+                if (!isDragging) return;
+                e.preventDefault();
+                currentX = e.type === 'mousemove' ? e.clientX : e.touches[0].clientX;
+                const diff = currentX - startX;
+                
+                card.style.transform = `translateX(${diff}px) rotate(${diff * 0.1}deg)`;
+                
+                if (diff > 50) {
+                    card.classList.add('swiping-right');
+                    card.classList.remove('swiping-left');
+                } else if (diff < -50) {
+                    card.classList.add('swiping-left');
+                    card.classList.remove('swiping-right');
+                } else {
+                    card.classList.remove('swiping-left', 'swiping-right');
+                }
+            }
+            
+            function endDrag(e) {
+                if (!isDragging) return;
+                isDragging = false;
+                const diff = currentX - startX;
+                
+                if (Math.abs(diff) > 100) {
+                    if (diff > 0) {
+                        swipeRight();
+                    } else {
+                        swipeLeft();
+                    }
+                } else {
+                    card.style.transform = '';
+                    card.classList.remove('swiping-left', 'swiping-right');
+                }
+            }
+            
+            card.addEventListener('mousedown', startDrag);
+            card.addEventListener('touchstart', startDrag, { passive: false });
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('touchmove', drag, { passive: false });
+            document.addEventListener('mouseup', endDrag);
+            document.addEventListener('touchend', endDrag);
+            
+            cardArea.appendChild(card);
+            
+            // Force a reflow to ensure the card is rendered
+            card.offsetHeight;
+        }
+
+        // Swipe Actions
+        function swipeLeft() {
+            const card = document.querySelector('.food-card');
+            if (!card) return;
+            
+            card.style.transition = 'all 0.3s';
+            card.style.transform = 'translateX(-150%) rotate(-30deg)';
+            card.style.opacity = '0';
+            
+            swipeCount++;
+            comboCount = 0;
+            updateStats();
+            playSound('swipe');
+            
+            setTimeout(() => {
+                currentIndex++;
+                showCard();
+            }, 300);
+        }
+
+        function swipeRight() {
+            const card = document.querySelector('.food-card');
+            if (!card) return;
+            
+            card.style.transition = 'all 0.3s';
+            card.style.transform = 'translateX(150%) rotate(30deg)';
+            card.style.opacity = '0';
+            
+            const food = currentDeck[currentIndex];
+            matches.push(food);
+            swipeCount++;
+            matchCount++;
+            comboCount++;
+            updateStats();
+            
+            showMatchOverlay(food);
+            playSound('match');
+            
+            setTimeout(() => {
+                currentIndex++;
+                showCard();
+            }, 300);
+        }
+
+        function superLike() {
+            const card = document.querySelector('.food-card');
+            if (!card) return;
+            
+            card.style.transition = 'all 0.5s';
+            card.style.transform = 'translateY(-200%) scale(1.2)';
+            card.style.opacity = '0';
+            
+            const food = currentDeck[currentIndex];
+            matches.push(food);
+            superLikes.push(food);
+            swipeCount++;
+            matchCount++;
+            comboCount++;
+            updateStats();
+            
+            showMatchOverlay(food, true);
+            playSound('match');
+            
+            setTimeout(() => {
+                currentIndex++;
+                showCard();
+            }, 500);
+        }
+
+        // Match Overlay
+        function showMatchOverlay(food, isSuper = false) {
+            const overlay = document.getElementById('matchOverlay');
+            const emoji = document.getElementById('matchEmoji');
+            const info = document.getElementById('matchInfo');
+            
+            emoji.textContent = isSuper ? '⭐' : food.emoji;
+            info.textContent = `${food.name} - $${food.price}`;
+            
+            overlay.classList.add('show');
+            setTimeout(() => {
+                overlay.classList.remove('show');
+            }, 800); // Reduced from 1500ms to 800ms for faster swiping
+        }
+
+        // Update Stats
+        function updateStats() {
+            document.getElementById('swipeCount').textContent = swipeCount;
+            document.getElementById('matchCount').textContent = matchCount;
+            document.getElementById('comboCount').textContent = comboCount;
+            
+            const remaining = currentDeck.length - currentIndex;
+            document.getElementById('remainingCards').textContent = `${remaining} card${remaining !== 1 ? 's' : ''} remaining`;
+        }
+
+        // Show Results
+        function showResults() {
+            showScreen('resultsScreen');
+            
+            document.getElementById('totalSwipes').textContent = swipeCount;
+            document.getElementById('totalMatches').textContent = matchCount;
+            
+            const matchesList = document.getElementById('matchesList');
+            matchesList.innerHTML = '';
+            
+            if (matches.length === 0) {
+                matchesList.innerHTML = '<div style="text-align: center; color: rgba(255,255,255,0.6); padding: 40px;">NO MATCHES FOUND. You swiped left on everything! 😅<br><br>Try again with different preferences?</div>';
+            } else {
+                // Show a summary message
+                const summaryDiv = document.createElement('div');
+                summaryDiv.style.cssText = 'text-align: center; color: var(--neon-cyan); font-size: 18px; margin-bottom: 20px; padding: 20px; background: rgba(0, 255, 255, 0.1); border-radius: 15px; border: 1px solid var(--neon-cyan);';
+                summaryDiv.innerHTML = `You swiped right on <strong>${matchCount}</strong> out of <strong>${swipeCount}</strong> options!`;
+                matchesList.appendChild(summaryDiv);
+                
+                matches.forEach(food => {
+                    const item = document.createElement('div');
+                    item.className = 'match-item';
+                    item.innerHTML = `
+                        <div class="match-item-emoji">${food.emoji}</div>
+                        <div class="match-item-info">
+                            <div class="match-item-name">${food.name}</div>
+                            <div class="match-item-price">$${food.price}</div>
+                        </div>
+                    `;
+                    matchesList.appendChild(item);
+                });
+                
+                const total = matches.reduce((sum, food) => sum + food.price, 0);
+                const totalDiv = document.createElement('div');
+                totalDiv.style.cssText = 'text-align: center; font-size: 20px; font-weight: 700; color: var(--neon-cyan); margin-top: 20px; font-family: Orbitron; text-shadow: 0 0 20px var(--neon-cyan);';
+                totalDiv.textContent = `TOTAL COST: $${total}`;
+                matchesList.appendChild(totalDiv);
+            }
+        }
+
+        // Restart
+        function restartApp() {
+            location.reload();
+        }
+
+        // Button Controls
+        document.getElementById('nopeBtn').addEventListener('click', swipeLeft);
+        document.getElementById('likeBtn').addEventListener('click', swipeRight);
+        document.getElementById('superBtn').addEventListener('click', superLike);
+
+        // Keyboard Controls
+        document.addEventListener('keydown', (e) => {
+            if (document.getElementById('gameScreen').classList.contains('active')) {
+                if (e.key === 'ArrowLeft') swipeLeft();
+                if (e.key === 'ArrowRight') swipeRight();
+                if (e.key === 'ArrowUp') superLike();
+            }
+        });
+
+        // Initialize
+        document.querySelectorAll('.preference-step').forEach((step, index) => {
+            if (index > 0) step.style.display = 'none';
+        });
+    </script>
+</body>
+</html>
