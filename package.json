@@ -1,0 +1,185 @@
+{
+  "foods": [
+    {
+      "id": 1,
+      "name": "RAMEN NEXUS",
+      "emoji": "🍜",
+      "description": "Digital noodles in quantum broth",
+      "tags": ["spicy", "fast", "comfort", "cheap"],
+      "vibes": ["hangry", "comfort", "adventure"],
+      "price": 12,
+      "category": "asian"
+    },
+    {
+      "id": 2,
+      "name": "CYBER SUSHI",
+      "emoji": "🍣",
+      "description": "Molecular gastronomy meets tradition",
+      "tags": ["fresh", "fancy", "healthy"],
+      "vibes": ["fancy", "adventure"],
+      "price": 45,
+      "category": "asian"
+    },
+    {
+      "id": 3,
+      "name": "HOLOGRAM BURGER",
+      "emoji": "🍔",
+      "description": "Augmented reality beef experience",
+      "tags": ["fast", "comfort", "cheap", "filling"],
+      "vibes": ["hangry", "comfort"],
+      "price": 15,
+      "category": "american"
+    },
+    {
+      "id": 4,
+      "name": "NEON PIZZA",
+      "emoji": "🍕",
+      "description": "Glowing cheese from the matrix",
+      "tags": ["fast", "cheap", "comfort", "shareable"],
+      "vibes": ["hangry", "comfort"],
+      "price": 18,
+      "category": "italian"
+    },
+    {
+      "id": 5,
+      "name": "QUANTUM TACOS",
+      "emoji": "🌮",
+      "description": "Superposition of flavors",
+      "tags": ["spicy", "fast", "cheap", "adventure"],
+      "vibes": ["hangry", "adventure"],
+      "price": 10,
+      "category": "mexican"
+    },
+    {
+      "id": 6,
+      "name": "SYNTHETIC STEAK",
+      "emoji": "🥩",
+      "description": "Lab-grown luxury protein",
+      "tags": ["fancy", "filling", "premium"],
+      "vibes": ["fancy"],
+      "price": 65,
+      "category": "steakhouse"
+    },
+    {
+      "id": 7,
+      "name": "DIGITAL DIM SUM",
+      "emoji": "🥟",
+      "description": "Bite-sized data packets",
+      "tags": ["fancy", "shareable", "adventure"],
+      "vibes": ["fancy", "adventure"],
+      "price": 35,
+      "category": "asian"
+    },
+    {
+      "id": 8,
+      "name": "RETRO MAC & CHEESE",
+      "emoji": "🧀",
+      "description": "Comfort food from the 80s",
+      "tags": ["comfort", "cheap", "filling"],
+      "vibes": ["comfort"],
+      "price": 14,
+      "category": "american"
+    },
+    {
+      "id": 9,
+      "name": "PLASMA CURRY",
+      "emoji": "🍛",
+      "description": "Nuclear-powered spice experience",
+      "tags": ["spicy", "comfort", "filling", "adventure"],
+      "vibes": ["adventure", "comfort"],
+      "price": 20,
+      "category": "indian"
+    },
+    {
+      "id": 10,
+      "name": "VOID SALAD",
+      "emoji": "🥗",
+      "description": "Greens from the dark dimension",
+      "tags": ["healthy", "fresh", "fancy"],
+      "vibes": ["fancy"],
+      "price": 22,
+      "category": "healthy"
+    },
+    {
+      "id": 11,
+      "name": "PIXEL PARFAIT",
+      "emoji": "🍨",
+      "description": "8-bit ice cream simulation",
+      "tags": ["sweet", "cheap", "fast"],
+      "vibes": ["comfort"],
+      "price": 8,
+      "category": "dessert"
+    },
+    {
+      "id": 12,
+      "name": "MATRIX MEATBALLS",
+      "emoji": "🍝",
+      "description": "Italian code in red sauce",
+      "tags": ["comfort", "filling", "cheap"],
+      "vibes": ["comfort", "hangry"],
+      "price": 16,
+      "category": "italian"
+    },
+    {
+      "id": 13,
+      "name": "CYBERPUNK PHO",
+      "emoji": "🍲",
+      "description": "Vietnamese soup with neon garnish",
+      "tags": ["healthy", "comfort", "adventure"],
+      "vibes": ["adventure", "comfort"],
+      "price": 18,
+      "category": "asian"
+    },
+    {
+      "id": 14,
+      "name": "LASER LOBSTER",
+      "emoji": "🦞",
+      "description": "Crustacean from the future",
+      "tags": ["fancy", "premium", "fresh"],
+      "vibes": ["fancy"],
+      "price": 85,
+      "category": "seafood"
+    },
+    {
+      "id": 15,
+      "name": "BYTE-SIZED BURRITOS",
+      "emoji": "🌯",
+      "description": "Compressed data wrapped tight",
+      "tags": ["fast", "filling", "cheap", "spicy"],
+      "vibes": ["hangry", "comfort"],
+      "price": 13,
+      "category": "mexican"
+    }
+  ],
+  "tags_glossary": {
+    "spicy": "Hot and spicy foods",
+    "fast": "Quick service, ready in minutes",
+    "comfort": "Familiar, cozy, nostalgic",
+    "cheap": "Budget-friendly options",
+    "filling": "Large portions, very satisfying",
+    "fresh": "Fresh ingredients, light",
+    "fancy": "Upscale dining experience",
+    "healthy": "Nutritious, balanced",
+    "premium": "High-end, expensive",
+    "shareable": "Great for groups",
+    "sweet": "Desserts and sweet treats",
+    "adventure": "Exotic, unique flavors"
+  },
+  "vibes_description": {
+    "hangry": "For when you need food FAST and substantial",
+    "fancy": "Upscale dining for special occasions",
+    "comfort": "Cozy, familiar favorites that feel like home",
+    "adventure": "Exotic and exciting flavor experiences"
+  },
+  "categories": [
+    "asian",
+    "american",
+    "italian",
+    "mexican",
+    "steakhouse",
+    "indian",
+    "healthy",
+    "dessert",
+    "seafood"
+  ]
+}
